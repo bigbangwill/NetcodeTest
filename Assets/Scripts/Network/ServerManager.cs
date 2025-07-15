@@ -2,8 +2,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine.SceneManagement;
-using Unity.Multiplayer.Playmode;
-using System.Linq;
 
 public class ServerManager : NetworkBehaviour
 {
@@ -36,18 +34,8 @@ public class ServerManager : NetworkBehaviour
     private void RequestPawnClientRpc(RpcParams rpcParams)
     {
         ulong clientId = NetworkManager.Singleton.LocalClientId;
-        if (CurrentPlayer.ReadOnlyTags().Contains("Player 1"))
-        {
-            RequestPawnForClientRpc("Player 1", clientId);
-        }
-        else if (CurrentPlayer.ReadOnlyTags().Contains("Player 2"))
-        {
-            RequestPawnForClientRpc("Player 2", clientId);
-        }
-        else if (CurrentPlayer.ReadOnlyTags().Contains("Player 3"))
-        {
-            RequestPawnForClientRpc("Player 3", clientId);
-        }
+        string playerName = $"Player {clientId + 1}";
+        RequestPawnForClientRpc(playerName, clientId);
     }
 
     [Rpc(SendTo.Server)]
