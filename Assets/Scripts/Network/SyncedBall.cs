@@ -5,16 +5,6 @@ public class SyncedBall : NetworkBehaviour
 {
     public NetworkVariable<Vector3> Position = new();
 
-    public override void OnNetworkSpawn()
-    {
-        Position.OnValueChanged += OnPositionChanged;
-    }
-
-    private void OnPositionChanged(Vector3 oldPos, Vector3 newPos)
-    {
-        //transform.position = newPos;
-    }
-
     private void Update()
     {
         if (IsOwner)
