@@ -41,7 +41,7 @@ public class ServerManager : NetworkBehaviour
     [Rpc(SendTo.Server)]
     public void RequestPawnForClientRpc(string playerName, ulong clientId)
     {
-        Debug.Log($"Requsting pawn for cliend ID: {clientId} With Player Name of: {playerName}");
+        Debug.Log($"Requesting pawn for client ID: {clientId} with player name: {playerName}");
         SetPawnForPlayer(playerName, clientId);
     }
 
