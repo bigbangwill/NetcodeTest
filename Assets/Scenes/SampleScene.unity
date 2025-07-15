@@ -182,13 +182,13 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 24680337}
-    PlayerPrefab: {fileID: 3934672057731499783, guid: 92423f18269b6f240a981ec9d65b38fc, type: 3}
+    PlayerPrefab: {fileID: 0}
     Prefabs:
       NetworkPrefabsLists:
       - {fileID: 11400000, guid: 8371391c993957f4aba3110ddfe05227, type: 2}
     TickRate: 30
     ClientConnectionBufferTimeout: 10
-    ConnectionApproval: 0
+    ConnectionApproval: 1
     ConnectionData: 
     EnableTimeResync: 0
     TimeResyncInterval: 30
@@ -233,7 +233,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 573352848}
-  - component: {fileID: 573352847}
   - component: {fileID: 573352849}
   - component: {fileID: 573352850}
   - component: {fileID: 573352851}
@@ -244,18 +243,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &573352847
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 573352846}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93f4d23b1304c964eaab017143f5dfe3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &573352848
 Transform:
   m_ObjectHideFlags: 0
@@ -319,7 +306,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 573352846}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0d2c3e1a539a4d4f9f2599218c1e498, type: 3}
+  m_Script: {fileID: 11500000, guid: 93f4d23b1304c964eaab017143f5dfe3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1

@@ -1,10 +1,16 @@
 using System.Collections;
+using Unity.Multiplayer.Playmode;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 public class ConnectedPanel : NetworkBehaviour
 {
+    public static ConnectedPanel Instance;
+
+    public ServerManager serverManager;
+
     private void OnGUI()
     {
         if (IsSpawned)
@@ -26,9 +32,61 @@ public class ConnectedPanel : NetworkBehaviour
 
             if (GUI.Button(new Rect(10, 250, 120, 30), "Disconnect"))
             {
-                BackToMainMenuRpc();
+                BackToMainMenu();
                 StartCoroutine(WaitForClientsToDisconnect());
             }
+        }
+    }
+
+
+    public override void OnNetworkSpawn()
+    {
+        if (IsOwner)
+        {
+            Instance = this;
+        }
+
+        if (IsServer)
+        {
+            serverManager = new();
+        }
+
+        if (IsClient)
+        {
+            NetworkManager.Singleton.OnClientConnectedCallback += clientId =>
+            {
+                if (!IsOwner)
+                {
+                    Debug.LogWarning("Is Not the Owner");
+                    return;
+                }
+                if (CurrentPlayer.ReadOnlyTags().Contains("Player 1"))
+                {
+                    Debug.Log("PLayer 1");
+                    PlayerJoinedTheGameRpc("Player 1", clientId);
+                }
+                else if (CurrentPlayer.ReadOnlyTags().Contains("Player 2"))
+                {
+                    Debug.Log("PLayer 2");
+                    PlayerJoinedTheGameRpc("Player 2", clientId);
+                }
+            };
+        }
+    }
+
+    [Rpc(SendTo.Server)]
+    private void PlayerJoinedTheGameRpc(string playerName, ulong clientId)
+    {
+        Debug.Log($"Name: {playerName} Client ID: {clientId}");
+        if (serverManager.IsClientRegistered(playerName))
+        {
+            var playerPrefab = serverManager.GetClientPlayerPrefab(playerName);
+            playerPrefab.ChangeOwnership(clientId);
+        }
+        else
+        {
+            var playerPrefab = NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject;
+            serverManager.ClientFirstTimeConnected(playerName, playerPrefab);
         }
     }
 
@@ -39,8 +97,7 @@ public class ConnectedPanel : NetworkBehaviour
         SceneManager.LoadScene("SampleScene");
     }
 
-    [Rpc(SendTo.NotMe)]
-    private void BackToMainMenuRpc()
+    private void BackToMainMenu()
     {
         NetworkManager.Singleton.Shutdown();
         SceneManager.LoadScene("SampleScene");
