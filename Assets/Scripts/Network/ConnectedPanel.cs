@@ -34,13 +34,6 @@ public class ConnectedPanel : NetworkBehaviour
         }
     }
 
-    private IEnumerator WaitForClientsToDisconnect()
-    {
-        yield return new WaitUntil(() => NetworkManager.Singleton.ConnectedClients.Count == 1);
-        NetworkManager.Singleton.Shutdown();
-        //SceneManager.LoadScene("StartingScene");
-    }
-
     private void BackToMainMenu()
     {
         NetworkManager.Singleton.Shutdown();

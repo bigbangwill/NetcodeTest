@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Unity.Netcode;
-using UnityEngine.SceneManagement;
 
 public class ServerManager : NetworkBehaviour
 {
@@ -16,35 +15,8 @@ public class ServerManager : NetworkBehaviour
         {
             Instance = this;
             NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
-            NetworkManager.Singleton.SceneManager.OnLoadComplete += InitPlayer;
         }
     }
-
-    private void InitPlayer(ulong clientId, string sceneName, LoadSceneMode loadSceneMode)
-    {
-        Debug.Log(clientId);
-        if (sceneName == "In-Game")
-        {
-            RpcParams rpcParams = new RpcParams() { Send = RpcTarget.Single(clientId, RpcTargetUse.Temp) };
-            RequestPawnClientRpc(rpcParams);
-        }
-    }
-
-    [Rpc(SendTo.SpecifiedInParams)]
-    private void RequestPawnClientRpc(RpcParams rpcParams)
-    {
-        ulong clientId = NetworkManager.Singleton.LocalClientId;
-        string playerName = $"Player {clientId + 1}";
-        RequestPawnForClientRpc(playerName, clientId);
-    }
-
-    [Rpc(SendTo.Server)]
-    public void RequestPawnForClientRpc(string playerName, ulong clientId)
-    {
-        Debug.Log($"Requesting pawn for client ID: {clientId} with player name: {playerName}");
-        SetPawnForPlayer(playerName, clientId);
-    }
-
     public override void OnNetworkDespawn()
     {
         if (IsServer)

@@ -17,7 +17,6 @@ public class ConnectingPanel : MonoBehaviour
             if (GUI.Button(new Rect(10, 50, 100, 30), "Client"))
             {
                 NetworkManager.Singleton.StartClient();
-                //NetworkManager.Singleton.SceneManager.LoadScene("In-Game", UnityEngine.SceneManagement.LoadSceneMode.Single);
             }
             if (GUI.Button(new Rect(10, 90, 100, 30), "Server"))
             {
