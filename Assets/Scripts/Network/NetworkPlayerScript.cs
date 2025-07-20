@@ -1,5 +1,6 @@
 using Unity.Netcode;
 using UnityEditor;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class NetworkPlayerScript : NetworkBehaviour
@@ -17,24 +18,18 @@ public class NetworkPlayerScript : NetworkBehaviour
             {
                 NetworkManager.Singleton.SceneManager.OnLoadComplete += SceneManager_OnLoadComplete;
             }
-            else if (IsClient)
-            {
-                NetworkManager.Singleton.SceneManager.OnSynchronizeComplete += SceneManager_OnSynchronizeComplete;
-            }
         }
+    }
+
+    protected override void OnNetworkSessionSynchronized()
+    {
+        if(!IsServer && !IsHost)
+            RequestPawnForPlayerRPC(HELPER.GetPlayerName(), NetworkManager.Singleton.LocalClientId);
     }
 
     private void SceneManager_OnLoadComplete(ulong clientId, string sceneName, UnityEngine.SceneManagement.LoadSceneMode loadSceneMode)
     {
         if (sceneName == "In-Game" && clientId == NetworkManager.Singleton.LocalClientId)
-        {
-            SceneManager_OnSynchronizeComplete(clientId);
-        }
-    }
-
-    private void SceneManager_OnSynchronizeComplete(ulong clientId)
-    {
-        if (clientId == NetworkManager.LocalClientId)
         {
             RequestPawnForPlayerRPC(HELPER.GetPlayerName(), clientId);
         }
