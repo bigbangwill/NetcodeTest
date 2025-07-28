@@ -29,8 +29,12 @@ public class ServerManager : NetworkBehaviour
     {
         if (!IsClientRegistered(playerName))
         {
-            NetworkObject pawn = NetworkManager.Singleton.SpawnManager.InstantiateAndSpawn(pawnPrefab, clientId);
-            RegisterPlayer(playerName, pawn);
+            GameObject pawnGO = Instantiate(pawnPrefab.gameObject);
+            pawnGO.transform.position = new(0, 100, 0);
+            NetworkObject pawnNO = pawnGO.GetComponent<NetworkObject>();
+            pawnNO.GetComponent<NetworkObject>().Spawn();
+            pawnNO.ChangeOwnership(clientId);
+            RegisterPlayer(playerName, pawnNO);
         }
         else
         {
