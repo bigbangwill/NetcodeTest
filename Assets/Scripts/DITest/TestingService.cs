@@ -5,9 +5,11 @@ using VContainer.Unity;
 
 public class TestingService
 {
+    private int i = 0;
     public void TestMethod()
     {
-        Debug.Log("Test method");
+        i++;
+        Debug.Log("Test method " + i);
     }
 }
 
