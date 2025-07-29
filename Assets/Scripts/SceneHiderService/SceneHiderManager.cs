@@ -1,35 +1,20 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using VContainer.Unity;
 
-public class SceneHiderManager: IStartable
+public class SceneHiderManager
 {
     private readonly List<IHideable> hideables = new();
-    private readonly IEnumerable<IHideable> initialHideables;
-    private readonly Func<GameObject, IHideable> InstantiateHideable;
 
-    public SceneHiderManager(IEnumerable<IHideable> hideables, Func<GameObject,IHideable> getHideable)
-    {
-        initialHideables = hideables;
-        InstantiateHideable = getHideable;
-    }
-
-    public void Start()
+    public SceneHiderManager(IEnumerable<IHideable> initialHideables)
     {
         foreach (var hide in initialHideables)
         {
             hide.RegisterSelf();
             hideables.Add(hide);
         }
-
-        GameObject go = new GameObject();
-        go.AddComponent<MeshRenderer>();
-        go.AddComponent<MeshFilter>();
-        var hideable = InstantiateHideable(go);
-        hideable.RegisterSelf();
-        hideables.Add(hideable);
-        HideElements();
     }
 
     public void RegisterHideable(IHideable hideable)
@@ -50,6 +35,7 @@ public class SceneHiderManager: IStartable
 
     public void ShowElements()
     {
+        Debug.Log(hideables.Count);
         foreach (var hideable in hideables)
         {
             hideable.Show();

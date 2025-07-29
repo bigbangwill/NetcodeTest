@@ -19,7 +19,6 @@ public class ServerManager : NetworkBehaviour
         {
             Instance = this;
             NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
-            NetworkManager.Singleton.OnClientStarted += Singleton_OnClientStarted;
             NetworkManager.Singleton.OnClientConnectedCallback += Singleton_OnClientConnectedCallback;
         }
     }
@@ -27,11 +26,6 @@ public class ServerManager : NetworkBehaviour
     private void Singleton_OnClientConnectedCallback(ulong obj)
     {
         Debug.Log("Client connected: " + obj);
-    }
-
-    private void Singleton_OnClientStarted()
-    {
-        Debug.Log("Started");
     }
 
     public override void OnNetworkDespawn()

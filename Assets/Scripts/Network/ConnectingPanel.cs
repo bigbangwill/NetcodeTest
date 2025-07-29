@@ -1,5 +1,6 @@
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ConnectingPanel : MonoBehaviour
 {
@@ -13,10 +14,12 @@ public class ConnectingPanel : MonoBehaviour
             {
                 NetworkManager.Singleton.StartHost();
                 NetworkManager.Singleton.SceneManager.LoadScene("In-Game",UnityEngine.SceneManagement.LoadSceneMode.Single);
+                SceneManager.LoadScene("Online Scene",LoadSceneMode.Additive);
             }
             if (GUI.Button(new Rect(10, 50, 100, 30), "Client"))
             {
                 NetworkManager.Singleton.StartClient();
+                SceneManager.LoadScene("Online Scene", LoadSceneMode.Additive);
             }
             if (GUI.Button(new Rect(10, 90, 100, 30), "Server"))
             {
@@ -24,6 +27,5 @@ public class ConnectingPanel : MonoBehaviour
                 NetworkManager.Singleton.SceneManager.LoadScene("In-Game", UnityEngine.SceneManagement.LoadSceneMode.Single);
             }
         }
-        
     }
 }

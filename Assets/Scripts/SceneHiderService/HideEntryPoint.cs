@@ -10,10 +10,12 @@ public class HideEntryPoint : LifetimeScope
 
     protected override void Configure(IContainerBuilder builder)
     {
-        var hideableArray = hideableTransform.GetComponentsInChildren<IHideable>();
+        //var hideableArray = hideableTransform.GetComponentsInChildren<IHideable>();
+        var hideableArray = FindObjectsByType<TestForHide>(FindObjectsSortMode.None);
         foreach (var hide in hideableArray)
         {
-            builder.Register(_ => hide, Lifetime.Scoped);
+            var hideable = hide.GetComponent<IHideable>();
+            builder.Register(_ => hideable, Lifetime.Scoped);
         }
 
         builder.Register<Func<GameObject, IHideable>>(c => go =>
@@ -25,7 +27,5 @@ public class HideEntryPoint : LifetimeScope
         }, Lifetime.Scoped);
 
         builder.Register<SceneHiderManager>(Lifetime.Singleton);
-        builder.RegisterEntryPoint<SceneHiderManager>();
     }
-
 }
