@@ -8,14 +8,9 @@ public class TestForHide : MonoBehaviour, IHideable
     [Inject] private readonly SceneHiderManager sceneHiderManager;
     [Inject] private readonly TestingService testingService;
 
-    private void Start()
-    {
-        meshRenderer = GetComponent<MeshRenderer>();
-    }
-
     public void RegisterSelf()
     {
-        sceneHiderManager.RegisterHideable(this);
+        meshRenderer = GetComponent<MeshRenderer>();
     }
 
     public void Show()

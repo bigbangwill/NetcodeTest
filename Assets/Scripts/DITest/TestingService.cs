@@ -29,14 +29,8 @@ public class TestingEntryPoint : IStartable, ITickable
     public void Start()
     {
         service.TestMethod();
-        //var moveAction = playerInput.actions["Move"];
-
         var testingInjection = resolver.Resolve<TestingInjection>();
-
-
     }
-
-
 
     public void Tick()
     {
@@ -48,21 +42,13 @@ public class TestingInjection
 {
     public readonly PlayerInput playerInput;
 
-    //public TestingInjection()
-    //{
-    //    playerInput.actions["Move"].performed += ctx =>
-    //    {
-    //        Debug.Log(ctx.ReadValue<Vector2>());
-    //    };
-    //}
-
     [Inject]
     public TestingInjection(PlayerInput playerInput)
     {
         this.playerInput = playerInput;
         playerInput.actions["Move"].performed += ctx =>
         {
-            Debug.Log(ctx.ReadValue<Vector2>());
+            //Debug.Log(ctx.ReadValue<Vector2>());
         };
     }
 }

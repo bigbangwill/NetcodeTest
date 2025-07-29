@@ -1,6 +1,4 @@
 using Unity.Netcode;
-using UnityEditor;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class NetworkPlayerScript : NetworkBehaviour

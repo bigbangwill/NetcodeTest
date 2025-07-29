@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Unity.Netcode;
+using System;
+using VContainer;
 
 public class ServerManager : NetworkBehaviour
 {
@@ -9,14 +11,29 @@ public class ServerManager : NetworkBehaviour
     [SerializeField] private NetworkObject pawnPrefab;
     private Dictionary<string, NetworkObject> connectedObjects = new();
 
+    [Inject] private readonly Func<GameObject, GameObject> resolveFactory;
+
     public override void OnNetworkSpawn()
     {
         if (IsServer)
         {
             Instance = this;
             NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
+            NetworkManager.Singleton.OnClientStarted += Singleton_OnClientStarted;
+            NetworkManager.Singleton.OnClientConnectedCallback += Singleton_OnClientConnectedCallback;
         }
     }
+
+    private void Singleton_OnClientConnectedCallback(ulong obj)
+    {
+        Debug.Log("Client connected: " + obj);
+    }
+
+    private void Singleton_OnClientStarted()
+    {
+        Debug.Log("Started");
+    }
+
     public override void OnNetworkDespawn()
     {
         if (IsServer)
@@ -34,12 +51,15 @@ public class ServerManager : NetworkBehaviour
             NetworkObject pawnNO = pawnGO.GetComponent<NetworkObject>();
             pawnNO.GetComponent<NetworkObject>().Spawn();
             pawnNO.ChangeOwnership(clientId);
+            pawnGO.GetComponent<SyncedBall>().AssignPlayerInputRPC();
             RegisterPlayer(playerName, pawnNO);
         }
         else
         {
             var pawnNObj = GetClientPawn(playerName);
             pawnNObj.ChangeOwnership(clientId);
+            pawnNObj.ChangeOwnership(clientId);
+            pawnNObj.GetComponent<SyncedBall>().AssignPlayerInputRPC();
         }
     }
 
